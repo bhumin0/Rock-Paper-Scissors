@@ -44,6 +44,7 @@ function winner(userChoice, computerChoice){
 function game(){
     let userScore = 0;
     let computerScore = 0;
+
     //Game will run for 5 rounds
     for(let round = 1; round <= 5; round++){
         let computerChoice = getComputerChoice();
@@ -52,8 +53,7 @@ function game(){
 
         //Update score total.
         if(outcome == 'tied'){
-            userScore++;
-            computerScore++;
+            continue;
         }
         else if(outcome == 'won'){
             userScore++;
@@ -67,6 +67,7 @@ function game(){
 
     console.log(`Total user wins: ${userScore}`);
     console.log(`Total computer wins: ${computerScore}`);
+    console.log(`Total ties : ${5 - (computerScore + userScore)}`);
 }
 
 game();
