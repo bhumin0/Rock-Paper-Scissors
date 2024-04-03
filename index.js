@@ -1,5 +1,57 @@
 //List to hold all available game weapons.
-const options = ['rock', 'paper', 'scissors'];
+let options = ['rock', 'paper', 'scissors'];
+const buttons = document.querySelectorAll('button');
+
+
+
+
+let userScore = 0;
+let computerScore = 0;
+let draw = 0;
+let round = 0;
+let computerChoice = "";
+let userChoice = "";
+let outcome = "";
+
+let compRock = 0;
+let cpuRcokPercent = 0;
+let compPaper = 0;
+let cpuPaperPercent = 0;
+let compScissors = 0;
+let cpuScissorPercent = 0;
+
+let rockPerc = document.getElementById("rockPerc");
+let paperPerc = document.getElementById("paperPerc");
+let scissorsPerc = document.getElementById("scissorsPerc");
+
+
+// Add click event listener to each button
+buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+        console.log(button.id);
+        playRound(button.id);
+    });
+});
+
+//Plays single round of game
+function playRound(userChoice){
+    let computerChoice = getComputerChoice();
+    outcome = winner(userChoice, computerChoice);
+    updateScore(outcome);
+    computerPercentage(computerChoice);
+    round++;
+    //document.getElementById("result").textContent = `You ${outcome} against the computer.`;
+    document.getElementById("scoreBoard").textContent = `Wins: ${userScore}, Losses: ${computerScore}, Draws: ${draw}`;
+    rockPerc.textContent = `Rock: ${cpuRcokPercent}%`;
+    paperPerc.textContent = `Paper: ${cpuPaperPercent}%`;
+    scissorsPerc.textContent = `Scissors: ${cpuScissorPercent}%`;
+    
+    let pastResult = document.getElementById("pastResult");
+    let result = document.createElement("div");
+    result.setAttribute("id", `round${round}`);
+    result.textContent = `Round ${round}: User chose ${userChoice}, Computer chose ${computerChoice}. You ${outcome}! \n`;
+    pastResult.appendChild(result);
+}
 
 //Returns randomly generated choice for computer
 function getComputerChoice(){
@@ -40,34 +92,32 @@ function winner(userChoice, computerChoice){
     }
 }
 
-//Actual game (driver code)
-function game(){
-    let userScore = 0;
-    let computerScore = 0;
-
-    //Game will run for 5 rounds
-    for(let round = 1; round <= 5; round++){
-        let computerChoice = getComputerChoice();
-        let userChoice = getUserChoice();
-        let outcome = winner(userChoice, computerChoice);
-
-        //Update score total.
-        if(outcome == 'tied'){
-            continue;
-        }
-        else if(outcome == 'won'){
-            userScore++;
-        }
-        else{
-            computerScore++;
-        }
-        //Display the outcome of the round.
-        console.log(`You ${outcome} against the computer.`);
+//Updates score of user and computer after single round
+function updateScore(outcome){
+    if(outcome == 'tied'){
+        draw++;
     }
-
-    console.log(`Total user wins: ${userScore}`);
-    console.log(`Total computer wins: ${computerScore}`);
-    console.log(`Total ties : ${5 - (computerScore + userScore)}`);
+    else if(outcome == 'won'){
+        userScore++;
+    }
+    else{
+        computerScore++;
+    }
 }
 
-game();
+function computerPercentage(computerChoice){
+    if(computerChoice == 'rock'){
+        compRock++;
+    }
+    else if(computerChoice == 'paper'){
+        compPaper++;
+    }
+    else{
+        compScissors++;
+    }
+
+    total = compRock + compPaper + compScissors;
+    cpuRcokPercent = ((compRock/total) * 100).toFixed(2);
+    cpuPaperPercent = ((compPaper/total) * 100).toFixed(2);
+    cpuScissorPercent = ((compScissors/total) * 100).toFixed(2);
+}
